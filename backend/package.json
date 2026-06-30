@@ -1,0 +1,29 @@
+{
+  "name": "note-app",
+  "version": "1.0.0",
+  "description": "Backend for a notes app",
+  "homepage": "https://github.com/OTIENO272/note-app#readme",
+  "bugs": {
+    "url": "https://github.com/OTIENO272/note-app/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OTIENO272/note-app.git"
+  },
+  "license": "ISC",
+  "author": "Velonith Labs",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "axios": "^1.18.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.7.3",
+    "nodemon": "^3.1.14"
+  }
+}

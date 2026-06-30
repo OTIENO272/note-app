@@ -1,0 +1,46 @@
+import Note from "../model/notesModel.js"
+import axios from 'axios'
+
+const api = axios.create({
+    baseURL:"http://localhost:8000/api/v1/notes",
+})
+const addNote=async(req,res)=>{
+
+   try {
+    const {title,body,updatedAt}=req.body;
+    const note = await Note.create({
+        title,
+        body,
+        updatedAt,
+    })
+
+    return res.status(201).json({message:'Created Successfully!',note:note})
+   } catch (error) {
+    res.status(500) .json({err:'Internal sever error',error:error})
+   }
+}
+
+const updateNote=async(req,res)=>{
+    try {
+        if(Object.keys(req.body).length === 0){
+         return res.status(400).json({message:"No data Found"})
+      }
+        const note = await Note.findByIdAndUpdate(req.params.id,req.body,{new:true});
+        res.status(200).json({message:'Updated Successfully',note})
+    } catch (error) {
+       res.status(500).json({error:'Internal Sever error',err:error})
+        
+    }
+}
+
+const deleteNote=async(req,res)=>{
+    try {
+        const delNote = await Note.findByIdAndDelete(req.params.id)
+        res.status(200).json({msg:'Successfully Deleted',delNote})
+    } catch (error) {
+       res.status(500).json({error:'Internal Sever error',err:error}) 
+    }
+
+}
+
+export {addNote,updateNote,deleteNote}
