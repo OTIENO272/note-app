@@ -4,7 +4,7 @@ const noteSchema = new Schema({
 
     title:{type:String ,required:true,trim:true},
     body:{type:String ,required:true,trim:true},
-    updateAt:{type:Date ,default:new Date}
+    updatedAt:{type:Date ,default:new Date}
 },{
     timestamps:true
 })

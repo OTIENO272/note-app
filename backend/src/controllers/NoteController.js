@@ -1,9 +1,5 @@
 import Note from "../model/notesModel.js"
-import axios from 'axios'
 
-const api = axios.create({
-    baseURL:"http://localhost:8000/api/v1/notes",
-})
 const addNote=async(req,res)=>{
 
    try {
@@ -20,6 +16,14 @@ const addNote=async(req,res)=>{
    }
 }
 
+ const getNotes = async (req, res) => {
+  try {
+    const notes = await Note.find().sort({ createdAt: -1 });
+    return res.status(200).json(notes);
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
 const updateNote=async(req,res)=>{
     try {
         if(Object.keys(req.body).length === 0){
@@ -43,4 +47,4 @@ const deleteNote=async(req,res)=>{
 
 }
 
-export {addNote,updateNote,deleteNote}
+export {getNotes,addNote,updateNote,deleteNote}
