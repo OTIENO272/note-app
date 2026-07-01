@@ -22,7 +22,7 @@ const addNote =async(note)=>{
 const updateNotes =async(id,update)=>{
   try {
     const res = await api.patch(`/update/${id}`,update)
-    return res.data.update
+    return res.data.note
   } catch (error) {
     console.log("Failed to Update",error);
     throw error;

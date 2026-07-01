@@ -50,12 +50,14 @@ useEffect(
     
   };
 
-  const updateAppNote =async () => {
+  const updateAppNote =async (updatedNotes) => {
 
     try {
       const id = activeNoteId;
-      const update = await updateNotes(id)
-      setNotes([...update])
+      const update = await updateNotes(id,updatedNotes)
+      setNotes(prevNote =>
+        prevNote.map(n => n._id === id ? update :n)
+      )
     } catch (error) {
       setError('Failed to Update',error)
     }
