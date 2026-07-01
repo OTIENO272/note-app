@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Sidebar from './SideBar';
 import NoteEditor from './NoteEditor';
-import { fetchNotes ,addNote} from '../api/notes';
+import { fetchNotes ,addNote, updateNotes} from '../api/notes.js';
 
 
 export default function App() {
@@ -18,7 +18,7 @@ useEffect(
       try {
         const data = await fetchNotes();
         setNotes(Array.isArray(data) ? data :[])
-        console.log(data);
+        
         
       } catch (error) {
         setError(error.message)
@@ -50,11 +50,12 @@ useEffect(
     
   };
 
-  const updateNote =async () => {
+  const updateAppNote =async () => {
 
     try {
-      const update = await updateNote()
-      setNotes([...notes,...update])
+      const id = activeNoteId;
+      const update = await updateNotes(id)
+      setNotes([...update])
     } catch (error) {
       setError('Failed to Update',error)
     }
@@ -66,7 +67,7 @@ useEffect(
     if (activeNoteId === idToDelete) setActiveNoteId(null);
   };
 
-  const getActiveNote = () => notes.findById(note => note._id === activeNoteId);
+  const getActiveNote = () => notes.find(note => note._id === activeNoteId);
 
   return (
     <div className="app-container">
@@ -78,7 +79,7 @@ useEffect(
         deleteNote={deleteNote}
       />
       {activeNoteId ? (
-        <NoteEditor activeNote={getActiveNote()} updateNote={updateNote} />
+        <NoteEditor activeNote={getActiveNote()} updateAppNote={updateAppNote} />
       ) : (
         <div className="no-active-note">Select or create a note to start writing!</div>
       )}

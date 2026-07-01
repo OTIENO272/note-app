@@ -19,13 +19,14 @@ const addNote =async(note)=>{
    }
 
 }
-const updateNote =async(id,update)=>{
+const updateNotes =async(id,update)=>{
   try {
     const res = await api.patch(`/update/${id}`,update)
-    return res.data
+    return res.data.update
   } catch (error) {
-    console.log(error);
+    console.log("Failed to Update",error);
+    throw error;
     
   }
 }
-export {fetchNotes,addNote,updateNote}
+export {fetchNotes,addNote,updateNotes}

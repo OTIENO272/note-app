@@ -1,11 +1,11 @@
 
 
-export default function NoteEditor({ activeNote, updateNote }) {
+export default function NoteEditor({ activeNote, updateAppNote }) {
   
   // Handles changes for both input fields dynamically
   const handleChange = (e) => {
     const { name, value } = e.target;
-    updateNote({ [name]: value });
+    updateAppNote({ [name]: value });
   };
 
   return (
