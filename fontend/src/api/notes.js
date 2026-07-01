@@ -29,4 +29,16 @@ const updateNotes =async(id,update)=>{
     
   }
 }
-export {fetchNotes,addNote,updateNotes}
+
+const deleteNote=async(id)=>{
+
+  try {
+    const res =await  api.delete(`/delete/${id}`)
+    return res.data.note;
+  } catch (error) {
+     console.log("Failed to Delete",error);
+    throw error;
+  }
+
+}
+export {fetchNotes,addNote,updateNotes,deleteNote}

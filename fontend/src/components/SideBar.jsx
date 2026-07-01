@@ -1,6 +1,6 @@
 
 
-export default function Sidebar({ notes, createNewNote, activeNoteId, setActiveNoteId, deleteNote }) {
+export default function Sidebar({ notes, createNewNote, activeNoteId, setActiveNoteId, deleteAppNote }) {
   
   
   const getSnippet = (body) => {
@@ -37,7 +37,7 @@ export default function Sidebar({ notes, createNewNote, activeNoteId, setActiveN
                 className="delete-note-btn"
                 onClick={(e) => {
                   e.stopPropagation(); // Stops the click from selecting the note right before deleting it
-                  deleteNote(note.id);
+                  deleteAppNote(note._id);
                 }}
                 title="Delete note"
               >

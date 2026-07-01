@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Sidebar from './SideBar';
 import NoteEditor from './NoteEditor';
-import { fetchNotes ,addNote, updateNotes} from '../api/notes.js';
+import { fetchNotes ,addNote, updateNotes,deleteNote} from '../api/notes.js';
 
 
 export default function App() {
@@ -64,9 +64,16 @@ useEffect(
     
   };
 
-  const deleteNote = (idToDelete) => {
-    setNotes(prevNotes => prevNotes.filter(note => note._id !== idToDelete));
-    if (activeNoteId === idToDelete) setActiveNoteId(null);
+  const deleteAppNote =async (idToDelete) => {
+
+    try {
+      const deleted = await deleteNote(idToDelete);
+
+      setNotes(prevNote => prevNote.filter(note =>note._id !==idToDelete))
+    } catch (error) {
+      setError('Failed to Delete',error)
+    }
+  
   };
 
   const getActiveNote = () => notes.find(note => note._id === activeNoteId);
@@ -78,7 +85,7 @@ useEffect(
         createNewNote={createNewNote} 
         activeNoteId={activeNoteId} 
         setActiveNoteId={setActiveNoteId} 
-        deleteNote={deleteNote}
+        deleteAppNote={deleteAppNote}
       />
       {activeNoteId ? (
         <NoteEditor activeNote={getActiveNote()} updateAppNote={updateAppNote} />
