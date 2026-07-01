@@ -1,46 +1,72 @@
 import { useState, useEffect } from 'react';
 import Sidebar from './SideBar';
 import NoteEditor from './NoteEditor';
+import { fetchNotes ,addNote} from '../api/notes';
+
 
 export default function App() {
   // Initialize state directly from localStorage so data persists
-  const [notes, setNotes] = useState(() => {
-    const saved = localStorage.getItem('react-notes');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [notes, setNotes] = useState([]);
   const [activeNoteId, setActiveNoteId] = useState(null);
+  const [loading,setLoading] = useState(true)
+  const [error,setError] =useState(null)
 
   // Sync with localStorage every time the notes array changes
-  useEffect(() => {
-    localStorage.setItem('react-notes', JSON.stringify(notes));
-  }, [notes]);
-
-  const createNewNote = () => {
+useEffect(
+  ()=>{
+    const loadNotes =async()=>{
+      try {
+        const data = await fetchNotes();
+        setNotes(Array.isArray(data) ? data :[])
+        console.log(data);
+        
+      } catch (error) {
+        setError(error.message)
+      }
+      finally{
+        setLoading(false)
+      }
+    }
+    loadNotes()
+  },[]
+)
+  const createNewNote =async (inputTitle,inputBody) => {
     const newNote = {
-      id: Date.now(), 
-      title: 'Untitled Note',
-      body: '',
-      updatedAt: Date.now()
+      
+      title:inputTitle || 'Untitled Note',
+      body:inputBody || 'Note Content'
+      
     };
-    setNotes([newNote, ...notes]);
-    setActiveNoteId(newNote.id);
+    try {
+      const saved = await addNote(newNote)
+      setNotes([saved, ...notes])
+      setActiveNoteId(saved._id );
+    } catch (error) {
+      console.log(error);
+       setError("Failed to create note");
+      
+    }
+    
+    
   };
 
-  const updateNote = (updatedField) => {
-    setNotes(prevNotes => prevNotes.map(note => {
-      if (note.id === activeNoteId) {
-        return { ...note, ...updatedField, updatedAt: Date.now() };
-      }
-      return note;
-    }));
+  const updateNote =async () => {
+
+    try {
+      const update = await updateNote()
+      setNotes([...notes,...update])
+    } catch (error) {
+      setError('Failed to Update',error)
+    }
+    
   };
 
   const deleteNote = (idToDelete) => {
-    setNotes(prevNotes => prevNotes.filter(note => note.id !== idToDelete));
+    setNotes(prevNotes => prevNotes.filter(note => note._id !== idToDelete));
     if (activeNoteId === idToDelete) setActiveNoteId(null);
   };
 
-  const getActiveNote = () => notes.find(note => note.id === activeNoteId);
+  const getActiveNote = () => notes.findById(note => note._id === activeNoteId);
 
   return (
     <div className="app-container">

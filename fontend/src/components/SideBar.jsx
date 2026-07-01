@@ -13,7 +13,7 @@ export default function Sidebar({ notes, createNewNote, activeNoteId, setActiveN
     <aside className="sidebar">
       <div className="sidebar-header">
         <h3>My Notes</h3>
-        <button onClick={createNewNote} className="new-note-btn" title="Create new note">
+        <button onClick={()=>createNewNote()} className="new-note-btn" title="Create new note">
           + New Note
         </button>
       </div>
@@ -24,9 +24,9 @@ export default function Sidebar({ notes, createNewNote, activeNoteId, setActiveN
         ) : (
           notes.map((note) => (
             <div
-              key={note.id}
+              key={note._id}
               className={`sidebar-item ${note.id === activeNoteId ? 'active' : ''}`}
-              onClick={() => setActiveNoteId(note.id)}
+              onClick={() => setActiveNoteId(note._id)}
             >
               <div className="sidebar-item-content">
                 <h4 className="note-title-preview">{note.title || "Untitled Note"}</h4>

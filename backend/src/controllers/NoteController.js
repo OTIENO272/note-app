@@ -3,16 +3,18 @@ import Note from "../model/notesModel.js"
 const addNote=async(req,res)=>{
 
    try {
-    const {title,body,updatedAt}=req.body;
+    // const {title,body,updatedAt}=req.body;
     const note = await Note.create({
-        title,
-        body,
-        updatedAt,
+        title:req.body.title,
+        body:req.body.body,
+        
     })
 
     return res.status(201).json({message:'Created Successfully!',note:note})
    } catch (error) {
     res.status(500) .json({err:'Internal sever error',error:error})
+    console.log(error);
+    
    }
 }
 
