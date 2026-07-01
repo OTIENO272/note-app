@@ -1,11 +1,25 @@
-
+import { useRef, useState, useEffect } from "react";
 
 export default function NoteEditor({ activeNote, updateAppNote }) {
-  
-  // Handles changes for both input fields dynamically
+  const debounceRef = useRef(null);
+  const [localNote, setLocalNote] = useState(activeNote);
+
+  // Re-sync local state when switching to a different note
+  useEffect(() => {
+    setLocalNote(activeNote);
+  }, [activeNote._id]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    updateAppNote({ [name]: value });
+
+    // 1. Update the visible input immediately — no lag
+    setLocalNote(prev => ({ ...prev, [name]: value }));
+
+    // 2. Debounce the actual save to the server
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      updateAppNote({ [name]: value });
+    }, 500);
   };
 
   return (
@@ -15,18 +29,17 @@ export default function NoteEditor({ activeNote, updateAppNote }) {
           type="text"
           name="title"
           placeholder="Note Title..."
-          value={activeNote.title}
+          value={localNote.title}
           onChange={handleChange}
           className="editor-title-input"
           maxLength="50"
         />
       </div>
-      
       <div className="editor-body-container">
         <textarea
           name="body"
           placeholder="Start typing your thoughts here..."
-          value={activeNote.body}
+          value={localNote.body}
           onChange={handleChange}
           className="editor-textarea"
         />
